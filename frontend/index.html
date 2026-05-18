@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SwiftShip | Full Engine Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="background-particles"></div>
+
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar glass-panel">
+            <div class="brand">
+                <i class="fa-solid fa-truck-fast logo-icon"></i>
+                <span class="logo-text">SwiftShip</span>
+            </div>
+            <nav class="nav-menu" id="navMenu">
+                <a href="#" class="nav-item active" data-page="dashboard"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+                <a href="#" class="nav-item" data-page="orders"><i class="fa-solid fa-box"></i> Orders</a>
+                <a href="#" class="nav-item" data-page="scheduling"><i class="fa-solid fa-microchip"></i> Scheduling</a>
+                <a href="#" class="nav-item" data-page="stations"><i class="fa-solid fa-warehouse"></i> Stations</a>
+                <a href="#" class="nav-item" data-page="analytics"><i class="fa-solid fa-chart-pie"></i> Analytics</a>
+                <a href="#" class="nav-item" data-page="alerts"><i class="fa-solid fa-bell"></i> Alerts</a>
+                <a href="#" class="nav-item" data-page="settings"><i class="fa-solid fa-gear"></i> Settings</a>
+                <a href="#" class="nav-item" data-page="guide" style="margin-top: auto; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px;"><i class="fa-solid fa-book-open"></i> User Guide</a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Topbar -->
+            <header class="topbar glass-panel">
+                <div class="search-bar">
+                    <i class="fa-solid fa-search"></i>
+                    <input type="text" placeholder="Search operations...">
+                </div>
+                <div class="top-controls">
+                    <div class="system-status">
+                        <div class="status-dot"></div>
+                        <span id="systemStatusText">System Live</span>
+                    </div>
+                    <div class="user-profile">
+                        <img src="https://ui-avatars.com/api/?name=Admin&background=7C4DFF&color=fff" alt="User">
+                    </div>
+                </div>
+            </header>
+
+            <!-- PAGES CONTAINER -->
+            <div id="pagesContainer" style="flex: 1; overflow-y: auto;">
+                
+                <!-- PAGE: DASHBOARD -->
+                <div id="page-dashboard" class="page active">
+                    <div class="bento-grid">
+                        <div class="card glass-panel order-flow">
+                            <div class="card-header">
+                                <h2>Live Order Flow</h2>
+                                <i class="fa-solid fa-stream accent-icon"></i>
+                            </div>
+                            <div class="order-queue-container">
+                                <div class="order-queue" id="dashOrderQueue"></div>
+                            </div>
+                        </div>
+
+                        <div class="card glass-panel merge-sort">
+                            <div class="card-header">
+                                <h2>Merge Sort Optimizer</h2>
+                                <button id="btnRunSort" class="action-btn">Run Sort</button>
+                            </div>
+                            <div class="visualizer-container" id="mergeSortVisualizer">
+                                <div style="color: var(--text-secondary); text-align: center; margin-top: 20px;">Click "Run Sort" to visualize DAA priority ordering.</div>
+                            </div>
+                        </div>
+
+                        <div class="card glass-panel scheduling">
+                            <div class="card-header">
+                                <h2>CPU Scheduling (Hybrid Mode)</h2>
+                                <span class="tag">Active</span>
+                            </div>
+                            <div class="queues-container">
+                                <div class="queue-card sjf-queue" id="sjfCard">
+                                    <h3>SJF (Express Priority)</h3>
+                                    <div class="cpu-utilization">
+                                        <span id="sjfUtilText">Utilization: 0%</span>
+                                        <div class="progress-bar"><div class="fill sjf-fill" id="sjfUtilBar" style="width: 0%"></div></div>
+                                    </div>
+                                    <div class="active-job express-job" id="sjfActive">Idle</div>
+                                    <div class="waiting-list" id="sjfWaiting"></div>
+                                </div>
+                                <div class="queue-card fcfs-queue" id="fcfsCard">
+                                    <h3>FCFS (Standard Queue)</h3>
+                                    <div class="cpu-utilization">
+                                        <span id="fcfsUtilText">Utilization: 0%</span>
+                                        <div class="progress-bar"><div class="fill fcfs-fill" id="fcfsUtilBar" style="width: 0%"></div></div>
+                                    </div>
+                                    <div class="active-job standard-job" id="fcfsActive">Idle</div>
+                                    <div class="waiting-list" id="fcfsWaiting"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card glass-panel stations">
+                            <div class="card-header">
+                                <h2>Packing Stations</h2>
+                            </div>
+                            <div class="station-grid" id="dashStationGrid"></div>
+                        </div>
+
+                        <div class="card glass-panel analytics">
+                            <div class="card-header">
+                                <h2>System Analytics</h2>
+                            </div>
+                            <div class="charts-container">
+                                <div class="chart-wrapper"><canvas id="throughputChart"></canvas></div>
+                                <div class="chart-wrapper small"><canvas id="orderTypeChart"></canvas></div>
+                            </div>
+                        </div>
+
+                        <div class="card glass-panel alerts-center">
+                            <div class="card-header">
+                                <h2>Alert Center</h2>
+                            </div>
+                            <div class="alert-list" id="dashAlerts"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PAGE: ORDERS -->
+                <div id="page-orders" class="page" style="display: none;">
+                    <div class="card glass-panel" style="min-height: 80vh;">
+                        <div class="card-header">
+                            <h2>Order Management System</h2>
+                            <div style="display: flex; gap: 10px;">
+                                <button id="btnGenerateOrders" class="action-btn">Generate +10 Random Orders</button>
+                                <button id="btnClearOrders" class="action-btn error-btn">Clear All</button>
+                            </div>
+                        </div>
+                        <div class="form-container glass-panel" style="padding: 15px; margin-bottom: 20px;">
+                            <h3 style="margin-bottom: 10px;">Manual Order Entry</h3>
+                            <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+                                <input type="number" id="inputWeight" placeholder="Weight (kg)" class="styled-input">
+                                <select id="inputType" class="styled-input">
+                                    <option value="standard">Standard Delivery</option>
+                                    <option value="express">Express Delivery</option>
+                                </select>
+                                <button id="btnAddOrder" class="action-btn success-btn">Add Order</button>
+                            </div>
+                        </div>
+                        <div style="overflow-x: auto;">
+                            <table class="styled-table" id="ordersTable">
+                                <thead>
+                                    <tr>
+                                        <th>Order ID</th>
+                                        <th>Type</th>
+                                        <th>Weight</th>
+                                        <th>Arrival Time</th>
+                                        <th>Processing Time</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PAGE: SCHEDULING -->
+                <div id="page-scheduling" class="page" style="display: none;">
+                    <div class="card glass-panel" style="min-height: 80vh;">
+                        <div class="card-header">
+                            <h2>Engine Master Scheduler</h2>
+                            <button id="btnTick" class="action-btn success-btn">Process 1 Tick (+1s)</button>
+                        </div>
+                        <p style="color: var(--text-secondary); margin-bottom: 20px;">Advance the CPU simulation tick-by-tick to watch the SJF and FCFS algorithms process the queues.</p>
+                        
+                        <div class="queues-container" style="flex-direction: row; gap: 30px;">
+                            <div class="queue-card sjf-queue" style="flex: 1;">
+                                <h3>SJF Detailed Trace</h3>
+                                <div id="sjfLog" class="log-box"></div>
+                            </div>
+                            <div class="queue-card fcfs-queue" style="flex: 1;">
+                                <h3>FCFS Detailed Trace</h3>
+                                <div id="fcfsLog" class="log-box"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PAGE: STATIONS -->
+                <div id="page-stations" class="page" style="display: none;">
+                    <div class="card glass-panel" style="min-height: 80vh;">
+                        <div class="card-header">
+                            <h2>Station Fleet Control</h2>
+                        </div>
+                        <div class="station-grid" id="fullStationGrid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); flex-direction: row; display: grid;">
+                            <!-- Populated JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PAGE: ANALYTICS -->
+                <div id="page-analytics" class="page" style="display: none;">
+                    <div class="card glass-panel" style="min-height: 80vh;">
+                        <div class="card-header">
+                            <h2>Full Screen Analytics</h2>
+                        </div>
+                        <div style="height: 50vh; width: 100%;">
+                            <canvas id="largeThroughputChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PAGE: ALERTS -->
+                <div id="page-alerts" class="page" style="display: none;">
+                    <div class="card glass-panel" style="min-height: 80vh;">
+                        <div class="card-header">
+                            <h2>System Event Log</h2>
+                            <button id="btnClearAlerts" class="action-btn">Clear Logs</button>
+                        </div>
+                        <div class="alert-list" id="fullAlertsList"></div>
+                    </div>
+                </div>
+
+                <!-- PAGE: SETTINGS -->
+                <div id="page-settings" class="page" style="display: none;">
+                    <div class="card glass-panel" style="min-height: 80vh;">
+                        <div class="card-header">
+                            <h2>Engine Configuration</h2>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 20px; max-width: 500px;">
+                            <div class="setting-item">
+                                <label>Simulation Speed (Auto-Tick Interval)</label>
+                                <select id="setSpeed" class="styled-input">
+                                    <option value="0">Manual (Off)</option>
+                                    <option value="2000">Slow (2s)</option>
+                                    <option value="1000" selected>Normal (1s)</option>
+                                    <option value="500">Fast (0.5s)</option>
+                                </select>
+                            </div>
+                            <div class="setting-item">
+                                <label>Default Scheduler Mode</label>
+                                <select id="setScheduler" class="styled-input">
+                                    <option value="hybrid">Hybrid (SJF Express / FCFS Std)</option>
+                                    <option value="fcfs">Pure FCFS</option>
+                                    <option value="sjf">Pure SJF</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- PAGE: GUIDE -->
+                <div id="page-guide" class="page" style="display: none;">
+                    <div class="card glass-panel" style="min-height: 80vh;">
+                        <div class="card-header">
+                            <h2>Project Documentation & User Guide</h2>
+                        </div>
+                        <div style="color: var(--text-secondary); line-height: 1.6; font-size: 14px; overflow-y: auto;">
+                            <h3 style="color: #fff; margin-top: 20px; margin-bottom: 10px;"><i class="fa-solid fa-truck-fast text-cyan"></i> About The Project</h3>
+                            <p><strong>SwiftShip Engine</strong> is a high-performance simulation of a modern e-commerce warehouse. It demonstrates how advanced computer science concepts solve real-world logistics problems.</p>
+                            <ul style="margin-left: 20px; margin-bottom: 20px;">
+                                <li><strong>Algorithm (DAA):</strong> Uses <em>Merge Sort</em> to instantly organize huge batches of chaotic incoming orders by Priority (Express vs Standard) and Arrival Time.</li>
+                                <li><strong>Operating Systems (OS):</strong> Uses <em>CPU Scheduling (SJF & FCFS)</em> to distribute packages among "Packing Stations" (simulating multi-core processors) to maximize throughput.</li>
+                            </ul>
+
+                            <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 30px 0;">
+
+                            <h3 style="color: #fff; margin-bottom: 15px;"><i class="fa-solid fa-sitemap text-purple"></i> Page-by-Page Breakdown</h3>
+
+                            <h4 style="color: #00E5FF; margin-top: 15px;">1. Dashboard (The Command Center)</h4>
+                            <p>This is your global overview. It combines elements from all other pages into a beautiful layout.</p>
+                            <ul style="margin-left: 20px; margin-bottom: 15px;">
+                                <li><strong>Live Order Flow:</strong> A scrolling ticker showing new orders arriving into the warehouse.</li>
+                                <li><strong>Merge Sort Optimizer:</strong> A visualizer. Click "Run Sort" to see how the engine mathematically splits and merges unordered packages to figure out what needs to ship first.</li>
+                                <li><strong>CPU Scheduling:</strong> Shows real-time queue congestion. <em>SJF</em> handles Express (fastest jobs first), <em>FCFS</em> handles Standard (first in, first out).</li>
+                                <li><strong>Packing Stations:</strong> These act as your CPU Cores. If a ring hits 100%, an order is shipped!</li>
+                            </ul>
+
+                            <h4 style="color: #00E5FF; margin-top: 15px;">2. Orders (The Input Feed)</h4>
+                            <p>Manage the data entering the simulation.</p>
+                            <ul style="margin-left: 20px; margin-bottom: 15px;">
+                                <li><strong>Manual Entry:</strong> Type a weight, select Express/Standard, and inject a custom order into the live queues.</li>
+                                <li><strong>Generate +10:</strong> Instantly blasts 10 random orders into the simulation to test how the engine handles a traffic spike.</li>
+                                <li><strong>Live Table:</strong> A database view of every order, showing exactly how long it takes to process.</li>
+                            </ul>
+
+                            <h4 style="color: #00E5FF; margin-top: 15px;">3. Scheduling (The Brain)</h4>
+                            <p>Look under the hood of the CPU dispatch logic.</p>
+                            <ul style="margin-left: 20px; margin-bottom: 15px;">
+                                <li><strong>Detailed Trace Logs:</strong> A live history of exactly <em>which</em> order was given to <em>which</em> station at exactly <em>what</em> time.</li>
+                                <li><strong>Process 1 Tick:</strong> If you set the simulation speed to Manual in Settings, use this button to step forward 1 second at a time to slowly analyze the sorting decisions.</li>
+                            </ul>
+
+                            <h4 style="color: #00E5FF; margin-top: 15px;">4. Stations (The Workers)</h4>
+                            <p>Monitor your physical packing fleet.</p>
+                            <ul style="margin-left: 20px; margin-bottom: 15px;">
+                                <li><strong>Power Buttons <i class="fa-solid fa-power-off"></i>:</strong> Click these to simulate a hardware breakdown! The station turns red, stops working, and the engine will instantly rescue the package it was working on and re-route it back to the scheduling queues.</li>
+                            </ul>
+
+                            <h4 style="color: #00E5FF; margin-top: 15px;">5. Analytics & Alerts</h4>
+                            <ul style="margin-left: 20px; margin-bottom: 15px;">
+                                <li><strong>Analytics:</strong> A full-screen historical chart tracking your warehouse throughput (Packages completed over the last 60 seconds).</li>
+                                <li><strong>Alerts:</strong> The global event log warning you of breakdowns, repairs, and massive order inflows.</li>
+                            </ul>
+
+                            <h4 style="color: #00E5FF; margin-top: 15px;">6. Settings (The Controls)</h4>
+                            <ul style="margin-left: 20px; margin-bottom: 15px;">
+                                <li><strong>Simulation Speed:</strong> Change how fast time passes. Normal (1s), Fast (0.5s), or completely stop it (Manual) for debugging.</li>
+                                <li><strong>Default Mode:</strong> By default, we use a custom <em>Hybrid</em> scheduler. You can override the engine to force all orders into <em>Pure FCFS</em> (fair but slow) or <em>Pure SJF</em> (fast but delays large orders).</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
