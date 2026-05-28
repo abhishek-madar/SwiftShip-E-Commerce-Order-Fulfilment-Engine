@@ -3,99 +3,99 @@
         {
             "id": "ORD0000",
             "type": "express",
-            "weight": "19.46kg",
-            "time": "70s ago"
+            "weight": "5.86kg",
+            "time": "19s ago"
         },
         {
             "id": "ORD0001",
             "type": "standard",
-            "weight": "4.35kg",
-            "time": "25s ago"
+            "weight": "3.94kg",
+            "time": "1s ago"
         },
         {
             "id": "ORD0002",
             "type": "standard",
-            "weight": "9.26kg",
-            "time": "92s ago"
+            "weight": "7.93kg",
+            "time": "40s ago"
         },
         {
             "id": "ORD0003",
             "type": "standard",
-            "weight": "16.62kg",
-            "time": "41s ago"
+            "weight": "15.85kg",
+            "time": "4s ago"
         },
         {
             "id": "ORD0004",
-            "type": "express",
-            "weight": "19.89kg",
-            "time": "10s ago"
+            "type": "standard",
+            "weight": "5.6kg",
+            "time": "23s ago"
         },
         {
             "id": "ORD0005",
-            "type": "express",
-            "weight": "14.97kg",
-            "time": "17s ago"
+            "type": "standard",
+            "weight": "18.53kg",
+            "time": "98s ago"
         },
         {
             "id": "ORD0006",
             "type": "express",
-            "weight": "10.32kg",
-            "time": "24s ago"
+            "weight": "5.06kg",
+            "time": "10s ago"
         },
         {
             "id": "ORD0007",
-            "type": "standard",
-            "weight": "6.78kg",
-            "time": "81s ago"
+            "type": "express",
+            "weight": "19.55kg",
+            "time": "27s ago"
         },
         {
             "id": "ORD0008",
-            "type": "standard",
-            "weight": "8.24kg",
-            "time": "1s ago"
+            "type": "express",
+            "weight": "11.94kg",
+            "time": "58s ago"
         },
         {
             "id": "ORD0009",
             "type": "express",
-            "weight": "4.7kg",
-            "time": "72s ago"
+            "weight": "6.91kg",
+            "time": "92s ago"
         },
         {
             "id": "ORD0010",
             "type": "standard",
-            "weight": "3.91kg",
-            "time": "6s ago"
+            "weight": "0.66kg",
+            "time": "86s ago"
         },
         {
             "id": "ORD0011",
-            "type": "express",
-            "weight": "14.76kg",
-            "time": "8s ago"
+            "type": "standard",
+            "weight": "7.55kg",
+            "time": "53s ago"
         },
         {
             "id": "ORD0012",
-            "type": "express",
-            "weight": "9.42kg",
-            "time": "41s ago"
+            "type": "standard",
+            "weight": "15.63kg",
+            "time": "83s ago"
         },
         {
             "id": "ORD0013",
-            "type": "standard",
-            "weight": "7.34kg",
-            "time": "37s ago"
+            "type": "express",
+            "weight": "19.72kg",
+            "time": "78s ago"
         },
         {
             "id": "ORD0014",
-            "type": "standard",
-            "weight": "19.52kg",
-            "time": "100s ago"
+            "type": "express",
+            "weight": "8.23kg",
+            "time": "87s ago"
         }
     ],
     "merge_sort_sample": {
         "root": [
             {
                 "id": "ORD0000",
-                "type": "standard"
+                "type": "express"
             },
             {
                 "id": "ORD0001",
@@ -103,29 +103,29 @@
             },
             {
                 "id": "ORD0002",
-                "type": "express"
+                "type": "standard"
             },
             {
                 "id": "ORD0003",
-                "type": "express"
+                "type": "standard"
             }
         ],
         "sorted": [
+            {
+                "id": "ORD0001",
+                "type": "express"
+            },
+            {
+                "id": "ORD0000",
+                "type": "express"
+            },
             {
                 "id": "ORD0004",
                 "type": "express"
             },
             {
-                "id": "ORD0002",
-                "type": "express"
-            },
-            {
-                "id": "ORD0001",
-                "type": "express"
-            },
-            {
                 "id": "ORD0003",
-                "type": "express"
+                "type": "standard"
             }
         ]
     },
@@ -134,26 +134,26 @@
             "utilization": 94,
             "processing": {
                 "id": "ORD0000",
-                "time_left": "38s left",
+                "time_left": "11s left",
                 "type": "express"
             },
             "waiting": [
-                "ORD0001 (Est: 8s)",
-                "ORD0002 (Est: 18s)",
-                "ORD0003 (Est: 33s)"
+                "ORD0001 (Est: 7s)",
+                "ORD0002 (Est: 15s)",
+                "ORD0003 (Est: 31s)"
             ]
         },
         "fcfs": {
             "utilization": 78,
             "processing": {
                 "id": "ORD0000",
-                "time_left": "38s left",
+                "time_left": "11s left",
                 "type": "express"
             },
             "waiting": [
-                "ORD0001 (Wait: 25s)",
-                "ORD0002 (Wait: 92s)",
-                "ORD0003 (Wait: 41s)"
+                "ORD0001 (Wait: 1s)",
+                "ORD0002 (Wait: 40s)",
+                "ORD0003 (Wait: 4s)"
             ]
         }
     },
@@ -186,8 +186,8 @@
             52
         ],
         "order_types": {
-            "express": 44,
-            "standard": 56
+            "express": 50,
+            "standard": 50
         }
     }
 }

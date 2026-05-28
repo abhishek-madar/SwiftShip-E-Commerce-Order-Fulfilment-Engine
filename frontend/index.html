@@ -44,9 +44,6 @@
                         <div class="status-dot"></div>
                         <span id="systemStatusText">System Live</span>
                     </div>
-                    <div class="user-profile">
-                        <img src="https://ui-avatars.com/api/?name=Admin&background=7C4DFF&color=fff" alt="User">
-                    </div>
                 </div>
             </header>
 
@@ -192,11 +189,11 @@
 
                 <!-- PAGE: STATIONS -->
                 <div id="page-stations" class="page" style="display: none;">
-                    <div class="card glass-panel" style="min-height: 80vh;">
+                    <div class="card glass-panel station-fleet-page">
                         <div class="card-header">
                             <h2>Station Fleet Control</h2>
                         </div>
-                        <div class="station-grid" id="fullStationGrid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); flex-direction: row; display: grid;">
+                        <div class="station-grid" id="fullStationGrid">
                             <!-- Populated JS -->
                         </div>
                     </div>
@@ -227,27 +224,58 @@
 
                 <!-- PAGE: SETTINGS -->
                 <div id="page-settings" class="page" style="display: none;">
-                    <div class="card glass-panel" style="min-height: 80vh;">
-                        <div class="card-header">
-                            <h2>Engine Configuration</h2>
+                    <div class="card glass-panel settings-page">
+                        <div class="settings-header">
+                            <div>
+                                <h2>Engine Configuration</h2>
+                                <p>Control simulation timing and dispatch behavior.</p>
+                            </div>
+                            <div class="settings-live-badge">
+                                <span class="status-dot"></span>
+                                Live Engine
+                            </div>
                         </div>
-                        <div style="display: flex; flex-direction: column; gap: 20px; max-width: 500px;">
+
+                        <div class="settings-grid">
                             <div class="setting-item">
-                                <label>Simulation Speed (Auto-Tick Interval)</label>
-                                <select id="setSpeed" class="styled-input">
-                                    <option value="0">Manual (Off)</option>
-                                    <option value="2000">Slow (2s)</option>
-                                    <option value="1000" selected>Normal (1s)</option>
-                                    <option value="500">Fast (0.5s)</option>
+                                <div class="setting-icon"><i class="fa-solid fa-gauge-high"></i></div>
+                                <div class="setting-copy">
+                                    <label for="setSpeed">Simulation Speed</label>
+                                    <span>Auto-tick interval for warehouse processing.</span>
+                                </div>
+                                <select id="setSpeed" class="styled-input setting-select">
+                                    <option value="0">Manual Off</option>
+                                    <option value="2000">Slow - 2s</option>
+                                    <option value="1000" selected>Normal - 1s</option>
+                                    <option value="500">Fast - 0.5s</option>
                                 </select>
                             </div>
                             <div class="setting-item">
-                                <label>Default Scheduler Mode</label>
-                                <select id="setScheduler" class="styled-input">
+                                <div class="setting-icon"><i class="fa-solid fa-diagram-project"></i></div>
+                                <div class="setting-copy">
+                                    <label for="setScheduler">Scheduler Mode</label>
+                                    <span>Choose how queued orders are dispatched.</span>
+                                </div>
+                                <select id="setScheduler" class="styled-input setting-select">
                                     <option value="hybrid">Hybrid (SJF Express / FCFS Std)</option>
                                     <option value="fcfs">Pure FCFS</option>
                                     <option value="sjf">Pure SJF</option>
                                 </select>
+                            </div>
+                        </div>
+
+                        <div class="settings-summary">
+                            <div>
+                                <span>Express Queue</span>
+                                <strong>SJF Priority</strong>
+                            </div>
+                            <div>
+                                <span>Standard Queue</span>
+                                <strong>FCFS Flow</strong>
+                            </div>
+                            <div>
+                                <span>Stations</span>
+                                <strong>3 Active Cores</strong>
                             </div>
                         </div>
                     </div>

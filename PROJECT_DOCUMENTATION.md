@@ -166,3 +166,46 @@ Sorted Orders (Merge Sort):
 - FCFS First Shipped: ORD0008 (standard), Completion: 17
 - SJF First Shipped: ORD0066 (express), Completion: 11
 - Hybrid First Shipped: ORD0066 (express), Completion: 11
+
+
+## Output Trace: Merge Sort on Small Sample
+Unsorted Orders:
+- ORD0000: express, Arrival: 25
+- ORD0001: express, Arrival: 20
+- ORD0002: standard, Arrival: 93
+- ORD0003: standard, Arrival: 63
+- ORD0004: express, Arrival: 61
+
+Sorted Orders (Merge Sort):
+- ORD0001: express, Arrival: 20
+- ORD0000: express, Arrival: 25
+- ORD0004: express, Arrival: 61
+- ORD0003: standard, Arrival: 63
+- ORD0002: standard, Arrival: 93
+
+
+## Output Trace: Sorting Performance
+- Merge Sort Time (1000 orders): 0.002107 seconds
+- Naive Sort Time (1000 orders): 0.068103 seconds
+
+
+## Output Trace: Scheduling Simulation Results
+### FCFS
+- Average Turnaround Time: 304.79
+- Average Express Turnaround Time: 328.76
+- Average Standard Turnaround Time: 280.82
+
+### SJF
+- Average Turnaround Time: 211.16
+- Average Express Turnaround Time: 219.20
+- Average Standard Turnaround Time: 203.12
+
+### Hybrid (SJF for Express, FCFS for Standard) with Station Breakdown
+- Average Turnaround Time: 381.52
+- Average Express Turnaround Time: 133.10
+- Average Standard Turnaround Time: 629.94
+
+### Summary of Orders Shipped First
+- FCFS First Shipped: ORD0085 (standard), Completion: 6
+- SJF First Shipped: ORD0085 (standard), Completion: 6
+- Hybrid First Shipped: ORD0085 (standard), Completion: 6

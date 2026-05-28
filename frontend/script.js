@@ -217,10 +217,14 @@ document.addEventListener('DOMContentLoaded', () => {
             const isBroken = st.status === 'red';
             const progressValue = isBroken ? 0 : st.progress;
             const offset = 251.2 - (251.2 * progressValue / 100);
+            const stationState = isBroken ? 'Offline' : (st.currentJob ? 'Processing' : 'Idle');
             return `
             <div class="station-box ${isBroken ? 'failed error-pulse' : (st.status==='green'?'active':'busy')}">
                 <div class="station-status ${st.status}"></div>
-                <h4>Station ${st.id} <br><span style="font-size:10px; color:var(--text-secondary)">${st.currentJob ? st.currentJob.id : 'Idle'}</span></h4>
+                <h4>
+                    <span class="station-title">Station ${st.id}</span>
+                    <span class="station-subtitle">${st.currentJob ? st.currentJob.id : stationState}</span>
+                </h4>
                 <div class="ring-container">
                     <svg class="progress-ring" viewBox="0 0 100 100">
                         <circle class="ring-bg" cx="50" cy="50" r="40"></circle>
@@ -228,7 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </svg>
                     <span class="ring-text">${progressValue}%</span>
                 </div>
-                <button onclick="toggleStation('${st.id}')" style="position:absolute; right:10px; background:none; border:none; color:var(--text-secondary); cursor:pointer;"><i class="fa-solid fa-power-off"></i></button>
+                <button class="station-power-btn" onclick="toggleStation('${st.id}')" aria-label="Toggle Station ${st.id}"><i class="fa-solid fa-power-off"></i></button>
             </div>`;
         }).join('');
         document.getElementById('dashStationGrid').innerHTML = stHTML;
@@ -285,15 +289,41 @@ document.addEventListener('DOMContentLoaded', () => {
     let throughputChart, orderTypeChart, largeThroughputChart;
     Chart.defaults.color = '#B0BEC5';
     Chart.defaults.font.family = 'Inter';
+    Chart.defaults.responsive = true;
 
     function renderCharts() {
         const expCount = State.orders.filter(o=>o.type==='express').length;
         const stdCount = State.orders.filter(o=>o.type==='standard').length;
+        const lineChartOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: { intersect: false, mode: 'index' },
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    backgroundColor: 'rgba(11,16,32,0.95)',
+                    borderColor: 'rgba(255,255,255,0.12)',
+                    borderWidth: 1,
+                    padding: 10
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: { precision: 0 },
+                    grid: { color: 'rgba(255,255,255,0.06)' }
+                },
+                x: {
+                    grid: { display: false },
+                    ticks: { maxRotation: 0 }
+                }
+            }
+        };
 
         if (document.getElementById('throughputChart')) {
             if (!throughputChart) {
                 const ctx1 = document.getElementById('throughputChart').getContext('2d');
-                throughputChart = new Chart(ctx1, { type: 'line', data: { labels: ['-60','-50','-40','-30','-20','-10','Now'], datasets: [{ label: 'Completed', data: State.throughputHist, borderColor: '#00E5FF', backgroundColor: 'rgba(0, 229, 255, 0.1)', borderWidth: 2, fill: true, tension: 0.4 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true }, x: { grid: { display: false } } } } });
+                throughputChart = new Chart(ctx1, { type: 'line', data: { labels: ['-60','-50','-40','-30','-20','-10','Now'], datasets: [{ label: 'Completed', data: State.throughputHist, borderColor: '#00E5FF', backgroundColor: 'rgba(0, 229, 255, 0.12)', borderWidth: 2, pointRadius: 3, pointHoverRadius: 5, pointBackgroundColor: '#00E5FF', fill: true, tension: 0.38 }] }, options: lineChartOptions });
             } else {
                 throughputChart.data.datasets[0].data = State.throughputHist;
                 throughputChart.update();
@@ -303,7 +333,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (document.getElementById('largeThroughputChart')) {
             if (!largeThroughputChart) {
                 const ctxL = document.getElementById('largeThroughputChart').getContext('2d');
-                largeThroughputChart = new Chart(ctxL, { type: 'line', data: { labels: ['-60','-50','-40','-30','-20','-10','Now'], datasets: [{ label: 'Completed', data: State.throughputHist, borderColor: '#00E5FF', backgroundColor: 'rgba(0, 229, 255, 0.1)', borderWidth: 2, fill: true, tension: 0.4 }] }, options: { responsive: true, maintainAspectRatio: false } });
+                largeThroughputChart = new Chart(ctxL, { type: 'line', data: { labels: ['-60','-50','-40','-30','-20','-10','Now'], datasets: [{ label: 'Completed', data: State.throughputHist, borderColor: '#00E5FF', backgroundColor: 'rgba(0, 229, 255, 0.12)', borderWidth: 2, pointRadius: 3, pointHoverRadius: 5, pointBackgroundColor: '#00E5FF', fill: true, tension: 0.38 }] }, options: lineChartOptions });
             } else {
                 largeThroughputChart.data.datasets[0].data = State.throughputHist;
                 largeThroughputChart.update();
@@ -313,7 +343,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (document.getElementById('orderTypeChart')) {
             if (!orderTypeChart) {
                 const ctx2 = document.getElementById('orderTypeChart').getContext('2d');
-                orderTypeChart = new Chart(ctx2, { type: 'doughnut', data: { labels: ['Express', 'Standard'], datasets: [{ data: [expCount, stdCount], backgroundColor: ['#FF4081', '#42A5F5'], borderWidth: 0 }] }, options: { responsive: true, maintainAspectRatio: false, cutout: '75%', plugins: { legend: { position: 'bottom' } } } });
+                orderTypeChart = new Chart(ctx2, { type: 'doughnut', data: { labels: ['Express', 'Standard'], datasets: [{ data: [expCount, stdCount], backgroundColor: ['#FF4081', '#42A5F5'], borderColor: 'rgba(11,16,32,0.9)', borderWidth: 3, hoverOffset: 6 }] }, options: { responsive: true, maintainAspectRatio: false, cutout: '68%', layout: { padding: 4 }, plugins: { legend: { position: 'bottom', labels: { usePointStyle: true, pointStyle: 'circle', boxWidth: 8, padding: 14 } }, tooltip: { backgroundColor: 'rgba(11,16,32,0.95)', padding: 10 } } } });
             } else {
                 orderTypeChart.data.datasets[0].data = [expCount, stdCount];
                 orderTypeChart.update();
