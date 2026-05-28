@@ -106,6 +106,46 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    async function loadServerSimulation() {
+        const response = await fetch('/api/simulation', { headers: { 'Accept': 'application/json' } });
+        if (!response.ok) {
+            throw new Error(`Simulation API returned ${response.status}`);
+        }
+        return response.json();
+    }
+
+    function hydrateFromServerSimulation(data) {
+        if (!data || !Array.isArray(data.incoming_orders)) return false;
+
+        State.orders = [];
+        State.sjfQueue = [];
+        State.fcfsQueue = [];
+
+        data.incoming_orders.forEach((item, index) => {
+            const weight = Number.parseFloat(item.weight) || 1;
+            const order = {
+                id: item.id || `ORD-${String(index + 1).padStart(3, '0')}`,
+                weight: weight.toFixed(1),
+                type: item.type === 'express' ? 'express' : 'standard',
+                arrivalTime: Number.isFinite(item.arrival_time) ? item.arrival_time : State.time,
+                processingTime: Number.isFinite(item.processing_time) ? item.processing_time : Math.max(1, Math.ceil(weight * 2)),
+                timeRemaining: Number.isFinite(item.processing_time) ? item.processing_time : Math.max(1, Math.ceil(weight * 2)),
+                status: 'queued'
+            };
+
+            State.orders.push(order);
+            if (order.type === 'express') State.sjfQueue.push(order);
+            else State.fcfsQueue.push(order);
+        });
+
+        if (data.metrics && Array.isArray(data.metrics.throughput)) {
+            State.throughputHist = data.metrics.throughput.slice(-7);
+        }
+
+        addAlert('Serverless simulation snapshot loaded.', 'success');
+        return true;
+    }
+
     function addAlert(msg, type='success') {
         State.alerts.unshift({ time: State.time, msg, type });
         if(State.alerts.length > 50) State.alerts.pop();
@@ -414,9 +454,20 @@ document.addEventListener('DOMContentLoaded', () => {
     // ----------------------------------------------------
     // INITIALIZATION
     // ----------------------------------------------------
-    generateRandomOrders(5);
-    updateUI();
-    if (State.settings.speed > 0) {
-        tickInterval = setInterval(engineTick, State.settings.speed);
+    async function initializeApp() {
+        try {
+            const serverState = await loadServerSimulation();
+            hydrateFromServerSimulation(serverState);
+        } catch (error) {
+            generateRandomOrders(5);
+            addAlert('Using local browser simulation mode.', 'warning');
+        }
+
+        updateUI();
+        if (State.settings.speed > 0) {
+            tickInterval = setInterval(engineTick, State.settings.speed);
+        }
     }
+
+    initializeApp();
 });

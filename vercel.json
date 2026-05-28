@@ -1,7 +1,17 @@
 {
+  "$schema": "https://openapi.vercel.sh/vercel.json",
   "cleanUrls": true,
   "trailingSlash": false,
+  "functions": {
+    "api/**/*.py": {
+      "excludeFiles": "{backend/**/__pycache__/**,backend/**/*.pyc,frontend/**,**/*.pdf,.git/**,backend/.git/**}"
+    }
+  },
   "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/$1"
+    },
     {
       "source": "/",
       "destination": "/frontend/index.html"
